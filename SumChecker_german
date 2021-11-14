@@ -1,0 +1,48 @@
+#!/bin/bash
+ 
+#Dateiauswahl
+datei=$(dialog --no-cancel --stdout --title "Datei auswählen:" --fselect "$PWD"/ 14 48)
+
+#Hashmodus auswählen
+choice=$(dialog --no-cancel --stdout --menu "Hashalgorithmus auswählen:" 0 0 0 1 "Sha256" 2 "Sha512" 3 "Sha1" 4 "Md5")
+
+#Vergleichssume eingeben
+checksum=$(dialog --no-cancel --stdout --title "" --inputbox "Vergleichswert:" 0 80)
+
+#Wartedialog anzeigen
+dialog --infobox "Berechnung in Arbeit." 0 0
+
+#Checksum berechnen durchführen
+case $choice in
+        1)
+            sum=$(sha256sum "$datei")
+        ;;
+
+        2)
+            sum=$(sha512sum "$datei")
+        ;;
+
+        3)
+            sum=$(sha1sum "$datei")
+        ;;
+
+        4)
+            sum=$(md5sum "$datei")
+        ;;
+
+        *)
+            dialog --infobox "\Z1!!FEHLER!!" 0 0
+        ;;
+esac
+
+#Vergleich durchführen und Ergebniss anzeigen
+if [ ${sum%%"$datei"} = $checksum ]
+  then
+    dialog --title "Ergebnis:" --colors --msgbox "\Z2Datei ist in Ordnung." 5 30 
+  else
+    dialog --title "Ergebnis:" --colors --msgbox "\Z1Datei ist Fehlerhaft." 5 30 
+fi
+
+#Terminal leeren und programm beenden
+clear
+exit

@@ -1,0 +1,48 @@
+#!/bin/bash
+ 
+#File selection
+file=$(dialog --no-cancel --stdout --title "Choose a file:" --fselect "$PWD"/ 14 48)
+
+#Choose hashing method
+choice=$(dialog --no-cancel --stdout --menu "Choose hashing algorithm:" 0 0 0 1 "Sha256" 2 "Sha512" 3 "Sha1" 4 "Md5")
+
+#Input checksum
+checksum=$(dialog --no-cancel --stdout --title "" --inputbox "Input checksum:" 0 80)
+
+#display waiting dialog
+dialog --infobox "Calculating. Please Wait." 0 0
+
+#Calculate checksum
+case $choice in
+        1)
+            sum=$(sha256sum "$file")
+        ;;
+
+        2)
+            sum=$(sha512sum "$file")
+        ;;
+
+        3)
+            sum=$(sha1sum "$file")
+        ;;
+
+        4)
+            sum=$(md5sum "$file")
+        ;;
+
+        *)
+            dialog --infobox "\Z1!!ERROR!!" 0 0
+        ;;
+esac
+
+#Compare checksums and display results
+if [ ${sum%%"$file"} = $checksum ]
+  then
+    dialog --title "Result:" --colors --msgbox "\Z2File is alright." 5 30 
+  else
+    dialog --title "Result:" --colors --msgbox "\Z1File is damaged." 5 30 
+fi
+
+#Clear Terminal and close programm
+clear
+exit
