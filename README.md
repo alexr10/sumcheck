@@ -16,3 +16,26 @@ To install the package follow these steps:
 Now you can launch the programm with `sumcheck`
 
 ## Pictures
+Choosing the file:
+
+![](images/file_choose.png)
+
+
+Choosing the algorithm:
+
+![](images/algorithm_choose.png)
+
+Inputing the checksum:
+
+![](images/checksum.png)
+
+
+Work in progress screen:
+
+![](images/calculating.png)
+
+
+Results:
+
+![](images/result_good.png)
+![](images/result_bad.png)
